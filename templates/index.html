@@ -5,49 +5,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
-    <h1>Website điểm danh bằng mã vạch</h1>
+    <div id="student">
+        <h1>Quản lý sinh viên</h1>
+        <form action="/create" method="post">
+            <span>Create</span>
+            <input autoComplete="off" type="text" name="name" placeholder="Enter Your Name">
+            <input autoComplete="off" type="text" name="code" placeholder="Enter Student Code">
+            <button type="submit">Add</button>
+        </form>
+        {%with messages = get_flashed_messages()%}
+        {%if messages%}
+        {% for message in messages %}
+        <span>
+            {{message}}
+        </span>
+        {%endfor%}
+        {%endif%}
+        {%endwith%}
 
-    <form action="/create" method="post">
-        <span>Create</span>
-        <input autoComplete="off" type="text" name="name" placeholder="Enter Your Name">
-        <input autoComplete="off" type="text" name="code" placeholder="Enter Student Code">
-        <button type="submit">Add</button>
-    </form>
-    {%with messages = get_flashed_messages()%}
-    {%if messages%}
-    {% for message in messages %}
-    <span>
-        {{message}}
-    </span>
-    {%endfor%}
-    {%endif%}
-    {%endwith%}
-
-    <ul>
-        {% for student in students %}
-        <li>
-            <span>
-                {{ student.name }} ({{ student.code }})
-            </span>
-            <span>
-                <form action="/update" method="POST">
-                    <input type="hidden" name="id" value="{{ student.id }}">
-                    <input autoComplete="off" value="{{ student.name }}" type="text" name="name"
-                        placeholder="Enter Your Name">
-                    <input autoComplete="off" value="{{ student.code }}" type="text" name="code"
-                        placeholder="Enter Student Code">
-                    <button type="submit">Update</button>
-                </form>
-            </span>
-            <span>
-                <a href="/delete/{{ student.id }}" onclick="return confirm('Are Sure Want To Deleted ?')">Delete</a>
-            </span>
-        </li>
-        {% endfor %}
-    </ul>
+        <h2>Danh sách sinh viên</h2>
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Code</th>
+                <th>Last checked in</th>
+                <th>Image</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.id }}</td>
+                <td>{{ student.name }}</td>
+                <td>{{ student.code }}</td>
+                <td>{{ student.last_checked_in }}</td>
+                <td>
+                    <img src="{{student.path}}" alt="">
+                </td>
+                <td>
+                    <form action="/update" method="POST">
+                        <input type="hidden" name="id" value="{{ student.id }}">
+                        <input autoComplete="off" value="{{ student.name }}" type="text" name="name"
+                            placeholder="Enter Your Name">
+                        <input autoComplete="off" value="{{ student.code }}" type="text" name="code"
+                            placeholder="Enter Student Code">
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+                <td>
+                    <a href="/delete/{{ student.id }}" onclick="return confirm('Are Sure Want To Deleted ?')">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </body>
 
 </html>
