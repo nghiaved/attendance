@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div id="student">
+        <div>
+            <a href="/">Quản lý sinh viên</a>
+        </div>
+        <h1>Điểm danh</h1>
+        <form action="/scanner" method="post" enctype="multipart/form-data">
+            <input type="file" name="image" accept="image/*">
+            <input type="submit" value="Scan">
+        </form>
+        {%with messages = get_flashed_messages()%}
+        {%if messages%}
+        {% for message in messages %}
+        <span>
+            {{message}}
+        </span>
+        {%endfor%}
+        {%endif%}
+        {%endwith%}
+    </div>
+</body>
+
+</html>

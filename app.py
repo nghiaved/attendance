@@ -5,6 +5,7 @@ import numpy as np
 import mysql.connector
 from barcode.writer import ImageWriter
 from barcode import Code128
+from pyzbar.pyzbar import decode
 
 app = Flask(__name__)
 app.secret_key = 'secret_key'
@@ -15,9 +16,10 @@ db = mysql.connector.connect(
     password="",
     database="attendance"
 )
+    
 
-
-def get_students():
+@app.route("/")
+def index():
     cursor = db.cursor()
     cursor.execute("SELECT * FROM students")
 
@@ -30,13 +32,29 @@ def get_students():
             "last_checked_in": row[3],
             "path": row[4]
         })
-        
-    return students
-    
+    return render_template("index.html", students=students)
 
-@app.route("/")
-def index():
-    return render_template("index.html", students=get_students())
+
+@app.route("/attendance")
+def attendance():
+        return render_template('attendance.html')
+
+
+@app.route('/scanner', methods=['POST'])
+def scanner():
+    qrcodes = decode(Image.open(request.files['image']))
+    if qrcodes:
+        code = qrcodes[0].data.decode('utf-8')
+        cursor = db.cursor()
+        cursor.execute("UPDATE students SET last_checked_in=NOW() WHERE code=%s", (code,))
+        db.commit()
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM students WHERE code=%s", (code,))
+        for row in cursor:
+            flash("Đã điểm danh: " + row[1] + " --- " + "MSSV: " + row[2] + " --- " + "at: " + str(row[3]))
+        return redirect('/attendance')
+    else:
+        return redirect('/attendance')
 
 
 @app.route('/create', methods = ['POST'])
@@ -83,7 +101,6 @@ def update():
 
         flash("Data Updated Successfully")
         return redirect('/')
-
 
 if __name__ == "__main__":
     app.run(debug=True)

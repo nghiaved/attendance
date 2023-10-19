@@ -10,11 +10,14 @@
 
 <body>
     <div id="student">
+        <div>
+            <a href="/attendance">Điểm danh</a>
+        </div>
         <h1>Quản lý sinh viên</h1>
         <form action="/create" method="post">
             <span>Create</span>
-            <input autoComplete="off" type="text" name="name" placeholder="Enter Your Name">
-            <input autoComplete="off" type="text" name="code" placeholder="Enter Student Code">
+            <input required autoComplete="off" type="text" name="name" placeholder="Enter Your Name">
+            <input required autoComplete="off" type="text" name="code" placeholder="Enter Student Code">
             <button type="submit">Add</button>
         </form>
         {%with messages = get_flashed_messages()%}

@@ -15,6 +15,10 @@ body {
     padding: 40px;
 }
 
+#student>div {
+    text-align: center;
+}
+
 #student>h1 {
     font-size: 32px;
     margin-bottom: 40px;
