@@ -6,8 +6,3 @@ CREATE TABLE `students` (
   `path` varchar(255)
 );
 
-INSERT INTO `students` (`code`, `name`) VALUES
-('B123', 'Nguyễn Văn A'),
-('B234', 'Trần Thị B'),
-('B345', 'Ngô Thanh C'),
-('B456', 'Lê Thị D');

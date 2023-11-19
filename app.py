@@ -50,10 +50,17 @@ def scanner():
         db.commit()
         cursor = db.cursor()
         cursor.execute("SELECT * FROM students WHERE code=%s", (code,))
+        
         for row in cursor:
-            flash("Đã điểm danh: " + row[1] + " --- " + "MSSV: " + row[2] + " --- " + "at: " + str(row[3]))
+            if row:
+                flash("Đã điểm danh: " + row[1] + " " + row[2] + " vào lúc: " + str(row[3]))
+                return redirect('/attendance')
+
+        flash("Mã vạch không tồn tại trong hệ thống!")
         return redirect('/attendance')
+
     else:
+        flash("Không có mã vạch nào được tìm thấy!")
         return redirect('/attendance')
 
 
@@ -92,11 +99,15 @@ def update():
         code = request.form['code']
         name = request.form['name']
 
+        barcode = Code128(code, writer=ImageWriter())
+        barcode_path = 'static/img/' + code
+        barcode.save(barcode_path)
+
         cursor = db.cursor()
         cursor.execute("""
-        UPDATE students SET code=%s, name=%s
+        UPDATE students SET code=%s, name=%s, path=%s
         WHERE id=%s
-        """, (code, name, id_data))
+        """, (code, name, barcode_path + '.png', id_data))
         db.commit()
 
         flash("Data Updated Successfully")

@@ -15,10 +15,10 @@
         </div>
         <h1>Quản lý sinh viên</h1>
         <form action="/create" method="post">
-            <span>Create</span>
-            <input required autoComplete="off" type="text" name="name" placeholder="Enter Your Name">
-            <input required autoComplete="off" type="text" name="code" placeholder="Enter Student Code">
-            <button type="submit">Add</button>
+            <span>Thêm</span>
+            <input required autoComplete="off" type="text" name="name" placeholder="Nhập họ và tên sinh viên">
+            <input required autoComplete="off" type="text" name="code" placeholder="Nhập mã số sinh viên">
+            <button type="submit">Tạo</button>
         </form>
         {%with messages = get_flashed_messages()%}
         {%if messages%}
@@ -34,12 +34,12 @@
         <table>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
-                <th>Code</th>
-                <th>Last checked in</th>
-                <th>Image</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                <th>Họ và tên sinh viên</th>
+                <th>Mã số sinh viên</th>
+                <th>Lần cuối điểm danh</th>
+                <th>Mã vạch</th>
+                <th>Chỉnh sửa</th>
+                <th>Xoá</th>
             </tr>
             {% for student in students %}
             <tr>
@@ -54,14 +54,15 @@
                     <form action="/update" method="POST">
                         <input type="hidden" name="id" value="{{ student.id }}">
                         <input autoComplete="off" value="{{ student.name }}" type="text" name="name"
-                            placeholder="Enter Your Name">
+                            placeholder="Nhập họ và tên sinh viên">
                         <input autoComplete="off" value="{{ student.code }}" type="text" name="code"
-                            placeholder="Enter Student Code">
-                        <button type="submit">Update</button>
+                            placeholder="Nhập mã số sinh viên">
+                        <button type="submit">Cập nhật</button>
                     </form>
                 </td>
                 <td>
-                    <a href="/delete/{{ student.id }}" onclick="return confirm('Are Sure Want To Deleted ?')">Delete</a>
+                    <a href="/delete/{{ student.id }}"
+                        onclick="return confirm('Bạn có chắc muốn xoá sinh viên ?')">Xoá</a>
                 </td>
             </tr>
             {% endfor %}
